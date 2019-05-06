@@ -1,18 +1,12 @@
-#COURSERA- Getting and Cleaning Data Project,  by: Juan Arnoldo Chocooj Iten
 
-#1.Merges the training and the test sets to create one data set.
-#2.Extracts only the measurements on the mean and standard deviation for each measurement.
-#3.Uses descriptive activity names to name the activities in the data set
-#4.Appropriately labels the data set with descriptive variable names.
-#5.From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-
-#------Carga del archivo RAW-------i
+#------Load of RAW data set-------i
 setwd("E:/R/Getting and Cleanning data/UCI HAR Dataset/")
 library(readr)
 library(dplyr)
 library(tidyr)
+library(plyr)
 
-#--Load de Headers
+#--Load de Headers from "features.txt" file
 features <- as.data.frame(read.table("features.txt", quote="\"", comment.char=""))
 activity_labels <- read.table("activity_labels.txt", quote="\"", comment.char="")
 
@@ -51,9 +45,8 @@ measurements <- join(measurements, activity_labels, by= "Activity", type= "left"
 measurements<- measurements[,c(2, 82, 3:81)]
 
 #5.From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-measure2 <- measurements[,c(3:81)]
-measurements_DF2 <- measurements%>%select(-Act_Descrip)%>%
-                    group_by(Subject)%>%
+avg_act_subj <- measurements[,c(3:81)]
+avg_act_subj <- measurements%>%group_by(Subject, Act_Descrip)%>%
                     summarise_each(funs(mean))
-  
 
+rm(x, y, activity_labels , subject ,subject_test, subject_train, features, X_train, y_train, X_test, y_test)  
