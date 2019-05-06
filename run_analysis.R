@@ -1,6 +1,6 @@
 
 #------Load of RAW data set-------i
-setwd("E:/R/Getting and Cleanning data/UCI HAR Dataset/")
+setwd("https://github.com/jchocooj/run_analysis/edit/master/run_analysis.R/UCI HAR Dataset/")
 library(readr)
 library(dplyr)
 library(tidyr)
