@@ -1,0 +1,84 @@
+---
+title: "Code Book"
+author: "Juan Arnoldo Chocooj"
+date: "6/5/2019"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## run Analysis Code Project
+
+### Data sets & variables loaded
+in two diferent file data sets, 1) test & 2) train
+
+
+subject in _subject_test_ and _subject_train_ data sets
+Activity in _y_test_ and _y_train_ data sets
+
+the script run_analysis, merge all raw tables, in only one tidy data set, called **data**, 
+> using: 
+* x <- rbind(X_test, X_train)
+* y <- rbind(y_test, y_train) and then
+* data <- cbind(subject,y,x)
+
+
+### Transformations applied
+> variable names with **Colnames()**
+
+* apply the variable names to 561 features diferents measures, from x_test and X_train data merged
+  + Select only de row #2 that contain the variable names
+  **features <- select(features, V2)** 
+  + Transpose data columns to variables(rows)
+  **features <- t(features)**
+  + Labels the data set with descriptive variable names.
+  **colnames(x) <- c(features)**   
+
+* apply the variable name to 6 activities, for y_test and y_train data merged. **colnames(y) <- c("Activity")**
+
+* apply the varaible name to subject data. **colnames(subject) <- c("Subject")**
+
+* apply the variable name to activity_labels **colnames(activity_labels) <- c("Activity","Act_Descrip")**
+
+> Selecting _Mean and standard deviation_ for each measurement. 
+
+* new data set called _measurements_ using **grepl**
+
+* measurements <- data[,grepl("Subject|Activ|mean()|std()", colnames(data))]
+
+> Descriptive activity names to name the activities in the data set. Join two data sets. 
+
+**measurments** and **activity_labels** then, select only columns with no duplicated data.
+
+* measurements <- join(measurements, activity_labels, by= "Activity", type= "left", match= "first")
+
+* measurements<- measurements[,c(2, 82, 3:81)]
+
+> creates a second, independent tidy data set with the average of each variable for each activity and each subject. using _dplyr()_  **group_by** and **sumarise_each** functions.
+
+* avg_act_subj <- measurements[,c(3:81)]
+
+* avg_act_subj <- measurements%>%group_by(Subject, Act_Descrip)%>%
+                    summarise_each(funs(mean))
+
+> at the end. remove unnecessary data sets with **rm()**
+
+* rm(x, y, activity_labels , subject ,subject_test, subject_train, features, X_train, y_train, X_test, y_test)  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -21,8 +21,7 @@ X_train <- read.table("train/X_train.txt", quote="\"", comment.char="")
 y_train <- read.table("train/y_train.txt", quote="\"", comment.char="")
 
 #--Cleaning data
-features <- as.data.frame(t(features)) #Transpose data in columns to rows
-features <- slice(features, 2:2) #select only de row contain names
+features <- select(features, V2)
 features <- t(features)
 
 
